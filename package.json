@@ -7,10 +7,10 @@
   "devDependencies": {
     "mocha": "*",
     "supertest": "*",
-    "istanbul": "~0.1.45"
+    "istanbul": "~0.1.45",
+    "coveralls": "~2.5.0"
   },
   "scripts": {
     "test": "mocha test/*.test.js"
   }
 }
-
