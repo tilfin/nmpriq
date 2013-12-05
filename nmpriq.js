@@ -2,8 +2,6 @@
  * nmpriq.js
  */
 
-var http = require('http');
-
 var datamodel = require("./queue");
 var servercore = require("./servercore");
 
@@ -21,11 +19,13 @@ function setDefaultLogger(){
 } 
 
 
-function HttpServer(port, dbUri, logger_){
+var httpServer;
+
+function HttpServer(port, dbUri){
   this._port = port;
   this._dbUri = dbUri;
 }
-HttpServer.prototype.setLogger = function(logger){
+HttpServer.prototype.setLogger = function(logger_){
   logger = logger_;
 }
 HttpServer.prototype.start = function(param){
@@ -33,19 +33,18 @@ HttpServer.prototype.start = function(param){
   
   datamodel.initialize(this._dbUri, param || null, logger);
 
-  this._app = servercore(datamodel, logger);
-  this._instance = http.createServer(this._app);
-  this._instance.listen(this._port);
+  this._svcore = servercore(datamodel, logger);
+  this._svcore.createServer().listen(this._port);
 
   logger.info("start server listening on port " + this._port);
 }
 HttpServer.prototype.stop = function(cb){
   logger.info("stopping server");
 
-  this._instance.close(cb);
-  this._instance = null;
-
   datamodel.terminate();
+
+  this._svcore.close(cb);
+  this._svcore = null;
 }
 HttpServer.prototype.restart = function(cb){
   var me = this;
@@ -56,29 +55,31 @@ HttpServer.prototype.restart = function(cb){
 }
 
 
-var httpServer;
 
 function exit(){
-  logger.info('exiting...');
   httpServer.stop(function(){
-    logger.info('exited.');
+    logger.info('server terminated.');
+    setTimeout(function(){
+      process.exit(1);
+    }, 400);
   });
 }
 
 process.on('SIGINT', function(){
-  logger.info('Got INT');
+  logger.info('Received Signal INT');
   exit();
 });
 
 process.on('SIGTERM', function(){
-  logger.info('Got TERM');
+  logger.info('Received Signal TERM');
   exit();
 });
 
 process.on('SIGHUP', function(){
-  logger.info('Got HUP. restarting...');
+  logger.info('Received Signal HUP');
+  logger.info('server restarting...');
   httpServer.restart(function(){
-    logger.info('restarted.');
+    logger.info('server restarted.');
   });
 });
 
@@ -97,7 +98,10 @@ function run(){
 }
 
 if (module.parent) {
-  module.exports = HttpServer;
+  module.exports = function(port, dbUri){
+    httpServer = new HttpServer(port, dbUri);
+    return httpServer;
+  }
 } else {
   run();
 }

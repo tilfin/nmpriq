@@ -2,7 +2,6 @@
  * longpoll.js
  */
 
-
 function LongPollManager(logger, sendJson){
   this.logger = logger;
   this._set = {};
@@ -11,6 +10,7 @@ function LongPollManager(logger, sendJson){
 
 LongPollManager.prototype.register = function(target, res){
   var me = this;
+  me.logger.info("start long polling...");
 
   if (target in this._set) {
     this._set[target].push(res);
@@ -21,7 +21,7 @@ LongPollManager.prototype.register = function(target, res){
   var mySet = this._set[target];
 
   res.on("close", function(){
-      me.logger.info("response closed.");
+      me.logger.info("long polling closed by client.");
 
       for (var i = 0; i < mySet.length; i++) {
         if (mySet[i] == this) {
@@ -68,6 +68,20 @@ LongPollManager.prototype.respond = function(datamodel, target, res, restCount){
 
       return result;
     });
+}
+
+LongPollManager.prototype.reset = function(){
+  var target, copiedSet = {};
+  for (target in this._set) {
+    copiedSet[target] = this._set[target].concat();
+  }
+
+  for (target in copiedSet){
+    copiedSet[target].forEach(function(res){
+      res.writeHead(500);
+      res.end();
+    });
+  }
 }
 
 function CreateLongPollManager(logger, sendJson){

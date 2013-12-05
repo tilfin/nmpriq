@@ -4,7 +4,7 @@ var http = require('http');
 var request = require('supertest');
 var mongodb = require("mongodb");
 var datamodel = require("../queue");
-var server = require("../servercore");
+var servercore = require("../servercore");
 
 
 var dummyLogger = {
@@ -14,7 +14,7 @@ var dummyLogger = {
         error: function(){}
     };
 
-var app = server(datamodel, dummyLogger);
+var app = servercore(datamodel, dummyLogger).createServer();
 
 
 before(function(done) {

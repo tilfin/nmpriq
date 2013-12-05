@@ -1,7 +1,9 @@
 /*
  * server.js
  */
-var URL  = require('url');
+var http = require('http'),
+    URL  = require('url');
+
 var longpoll = require('./longpoll');
 
 var logger, longPollManager;
@@ -30,6 +32,19 @@ function sendNoContent(res){
 
 function ServerCore(datamodel){
   this._datamodel = datamodel;
+}
+ServerCore.prototype.createServer = function(){
+  var me = this;
+  var sv = http.createServer(function(req, res, next){
+               me.listener(req, res, next);
+             });
+  this._server = sv;
+  return sv;
+}
+ServerCore.prototype.close = function(callback){
+  logger.info("closing servercore...");
+  longPollManager.reset(); 
+  this._server.close(callback); 
 }
 ServerCore.prototype.listener = function(req, res, next){
   var me = this;
@@ -81,8 +96,6 @@ ServerCore.prototype._dataOut = function(target, res){
         } else if (item) {
           sendJson(res, 200, item);
         } else {
-          // Long poll start
-          logger.debug("start long poll...");
           longPollManager.register(target, res);
         }
         return true;
@@ -132,11 +145,7 @@ function cServer(datamodel, mylogger){
   logger = mylogger;
   longPollManager = longpoll(logger, sendJson);
 
-  var serverCore = new ServerCore(datamodel);
-  function app(req, res, next){
-    serverCore.listener(req, res, next);
-  }
-  return app;
+  return new ServerCore(datamodel);
 }
 
 exports = module.exports = cServer;

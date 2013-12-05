@@ -2,7 +2,7 @@
 var request = require('supertest');
 var mongodb = require("mongodb");
 var datamodel = require("./datamodel_err_stub");
-var server = require("../servercore");
+var servercore = require("../servercore");
 
 
 var dummyLogger = {
@@ -12,7 +12,7 @@ var dummyLogger = {
         error: function(){}
     };
 
-var app = server(datamodel, dummyLogger);
+var app = servercore(datamodel, dummyLogger).createServer();
 
 
 describe('Simple DB Error', function() {
