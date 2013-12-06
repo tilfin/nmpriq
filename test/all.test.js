@@ -3,8 +3,8 @@ var assert = require('assert');
 var http = require('http');
 var request = require('supertest');
 var mongodb = require("mongodb");
-var datamodel = require("../queue");
-var servercore = require("../servercore");
+var datamodel = require("../lib/queue");
+var servercore = require("../lib/servercore");
 
 
 var dummyLogger = {

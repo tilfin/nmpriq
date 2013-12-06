@@ -2,7 +2,7 @@
 var request = require('supertest');
 var mongodb = require("mongodb");
 var datamodel = require("./datamodel_err_stub");
-var servercore = require("../servercore");
+var servercore = require("../lib/servercore");
 
 
 var dummyLogger = {

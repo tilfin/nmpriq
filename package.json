@@ -1,8 +1,11 @@
 {
   "name": "nmpriq",
+  "description": "Priority-queue server for Node.js with MongoDB backend",
   "version": "0.1.0",
+  "author": "Toshimitsu Takahashi <toshi@tilfin.com>",
   "dependencies": {
-    "mongodb": "1.3.*"
+    "mongodb": "1.3.*",
+    "commander": "~2.1.0"
   },
   "devDependencies": {
     "mocha": "*",
@@ -10,7 +13,14 @@
     "istanbul": "~0.1.45",
     "coveralls": "~2.5.0"
   },
+  "main": "index.js",
+  "bin": {
+    "nmpriq": "./bin/nmpriq"
+  },
   "scripts": {
     "test": "mocha test/*.test.js"
+  },
+  "engine": {
+    "node": ">= 0.10.0"
   }
 }

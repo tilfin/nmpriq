@@ -1,7 +1,7 @@
 
 var assert = require('assert');
 var mongodb = require("mongodb");
-var datamodel = require("../queue");
+var datamodel = require("../lib/queue");
 
 
 var dummyLogger = {
