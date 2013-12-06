@@ -1,1 +1,1 @@
-module.exports = require("../lib/nmpriq");
+module.exports = require("./lib/nmpriq");
