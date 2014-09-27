@@ -57,7 +57,7 @@ The 'key' is main item key.
     {"key":"item1","priority":10}
 
 If a client requests GET when the queue is emtpy, nmpriq server accepts its GET as long-polling.
-Receiving new item by other clients, The server immediately returns it.
+Receiving new item by other clients, the server immediately returns it.
 
 
 ### Use priority
@@ -65,12 +65,15 @@ Receiving new item by other clients, The server immediately returns it.
 The dequeue order is higher priority and enqueued order.
 A default prority is 10.
 
+'item1' is enqueued first with defalut prority.
+
     $ curl -X POST \
         -H 'Content-Type: application/json' \
         -d '{"key":"item1"}' \
         http://localhost:<port>/<queueName>
     {"message":"success"}
 
+'item2' is enqueued second with prority is 50.
 
     $ curl -X POST \
         -H 'Content-Type: application/json' \
@@ -78,13 +81,17 @@ A default prority is 10.
         http://localhost:<port>/<queueName>
     {"message":"success"}
 
+  
 
     $ curl -X GET http://localhost:<port>/<queueName>
     {"key":"item2","priority":50}
 
+'item2' is dequeued.
 
     $ curl -X GET http://localhost:<port>/<queueName>
     {"key":"item1","priority":10}
+
+'item1' is dequeued.
 
 
 ### Priority addition
