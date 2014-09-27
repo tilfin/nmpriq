@@ -56,6 +56,9 @@ The 'key' is main item key.
     $ curl -X GET http://localhost:<port>/<queueName>
     {"key":"item1","priority":10}
 
+If a client requests GET when the queue is emtpy, nmpriq server accepts its GET as long-polling.
+Receiving new item by other clients, The server immediately returns it.
+
 
 ### Use priority
 
