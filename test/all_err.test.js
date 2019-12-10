@@ -1,22 +1,22 @@
 
-var request = require('supertest');
-var mongodb = require("mongodb");
-var datamodel = require("./datamodel_err_stub");
+var request = require('supertest')
+var Datamodel = require("./datamodel_err_stub");
 var servercore = require("../lib/servercore");
 
 
 var dummyLogger = {
-        debug: function(){},
-        info : function(){},
-        warn : function(){},
-        error: function(){}
-    };
+  debug:() => {},
+  info :() => {},
+  warn :() => {},
+  error:() => {},
+}
 
-var app = servercore(datamodel, dummyLogger).createServer();
+const datamodel = new Datamodel(dummyLogger)
+const app = servercore(datamodel, dummyLogger).createServer()
 
 
-describe('Simple DB Error', function() {
-  describe('POST /foo', function() {
+describe('Simple DB Error', () => {
+  describe('POST /foo', () => {
     it('respond error with json', function(done){
       request(app)
         .post('/foo')
@@ -26,7 +26,7 @@ describe('Simple DB Error', function() {
     })
   });
 
-  describe('GET /foo', function() {
+  describe('GET /foo', () => {
     it('respond error with json', function(done){
       request(app)
         .get('/foo')
@@ -38,8 +38,8 @@ describe('Simple DB Error', function() {
 });
 
 
-describe('POST to 2 collection foo,bar on the same time', function() {
-  describe('POST /foo,bar', function() {
+describe('POST to 2 collection foo,bar on the same time', () => {
+  describe('POST /foo,bar', () => {
     it('respond success message with json', function(done){
       request(app)
         .post('/foo,bar')
@@ -51,8 +51,8 @@ describe('POST to 2 collection foo,bar on the same time', function() {
 });
 
 
-describe('Delete test', function(){
-  describe('DELETE /foo', function(){
+describe('Delete test', () => {
+  describe('DELETE /foo', () => {
     it('respond error', function(done){
       request(app)
         .del('/foo')
@@ -62,13 +62,12 @@ describe('Delete test', function(){
 });
 
 
-describe('Delete 2 targets', function(){
-  describe('DELETE /foo,bar', function(){
+describe('Delete 2 targets', () => {
+  describe('DELETE /foo,bar', () => {
     it('respond no content', function(done){
       request(app)
         .del('/foo,bar')
         .expect(500, done);
     })
-  });
-});
-
+  })
+})

@@ -1,41 +1,41 @@
-
-var assert = require('assert');
-var mongodb = require("mongodb");
-var datamodel = require("../lib/queue");
+const assert = require('assert')
+const Datamodel = require("../lib/queue")
 
 
-var dummyLogger = {
-        debug: function(){},
-        info : function(){},
-        warn : function(){},
-        error: function(){}
-    };
+const dummyLogger = {
+  debug: () => {},
+  info : () => {},
+  warn : () => {},
+  error: () => {},
+}
 
 
-describe('dataModel#initialize', function() {
-  afterEach(function(done){
-    datamodel.terminate();
-    done();
-  });
+describe('dataModel#initialize', () => {
+  const datamodel = new Datamodel(dummyLogger)
 
-  describe('not specify db name', function() {
-    it('should return error', function(done){
-      var dbUri = "mongodb://user:pass@localhost/";
-      datamodel.initialize(dbUri, null, dummyLogger, function(err){
-        assert.ok(!!err);
-        done();
-      });
+  afterEach(async () => {
+    await datamodel.terminate()
+  })
+
+  describe('not specify db name', () => {
+    it('should return error', async () => {
+      var dbUri = "mongodb://user:pass@localhost/"
+      try {
+        await datamodel.initialize(dbUri, null, dummyLogger)
+      } catch(err) {
+        assert.ok(!!err)
+      }
     })
-  });
+  })
 
-  describe('specify wrong user and pass', function() {
-    it('should return err', function(done){
-      var dbUri = "mongodb://user:pass@localhost/testdb";
-      datamodel.initialize(dbUri, null, dummyLogger, function(err){
+  describe('specify wrong user and pass', () => {
+    it('should return err', async () => {
+      const dbUri = "mongodb://user:pass@localhost/testdb"
+      try {
+        await datamodel.initialize(dbUri, null, dummyLogger)
+      } catch(err) {
         assert.ok(!!err);
-        done();
-      });
+      }
     })
-  });
-});
-
+  })
+})

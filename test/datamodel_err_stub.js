@@ -2,25 +2,26 @@
  * datamodel mock for DB Error
  */
 
-exports.initialize = function(dbUri, param, mylogger, callback){
-};
+class Dummy {
+  initialize(dbUri, param, mylogger, callback) {
+    return Promise.resolve()
+  }
 
+  terminate() {
+    return Promise.resolve()
+  }
 
-exports.terminate = function(){
-};
+  dataIn(target, items, callback) {
+    callback(new Error("DBError"));
+  }
 
+  dataOut(target, callback) {
+    callback(new Error("DBError"), null);
+  }
+  
+  async clear(target) {
+    throw new Error("DBError")
+  }
+}
 
-exports.dataIn = function(target, items, callback){
-  callback(new Error("DBError"));
-};
-
-
-exports.dataOut = function(target, callback){
-  callback(new Error("DBError"), null);
-};
-
-
-exports.clear = function(target, callback){
-  callback(new Error("DBError"));
-};
-
+module.exports = Dummy

@@ -1,48 +1,37 @@
-
-var assert = require('assert');
-var http = require('http');
-var request = require('supertest');
-var mongodb = require("mongodb");
-var datamodel = require("../lib/queue");
-var servercore = require("../lib/servercore");
+const assert = require('assert')
+const http = require('http')
+const request = require('supertest')
+const Datamodel = require("../lib/queue")
+const servercore = require("../lib/servercore")
 
 
-var dummyLogger = {
-        debug: function(){},
-        info : function(){},
-        warn : function(){},
-        error: function(){}
-    };
+const dummyLogger = {
+  debug: function(){},
+  info : function(){},
+  warn : function(){},
+  error: function(){},
+}
 
-var app = servercore(datamodel, dummyLogger).createServer();
+const datamodel = new Datamodel(dummyLogger)
+const app = servercore(datamodel, dummyLogger).createServer();
 
 
-before(function(done) {
-  datamodel.initialize("mongodb://localhost/testdb",
-                       { suffix: "TestQueue" }, dummyLogger);
-
-  setTimeout(function(){
-    done();
-  }, 1000);
+before(async () => {
+  await datamodel.initialize("mongodb://localhost/testdb", { suffix: "TestQueue" }, dummyLogger)
 })
 
-after(function(done) {
-  datamodel.terminate();
-
-  setTimeout(function(){
-    done();
-  }, 1000);
+after(async () => {
+  await datamodel.terminate()
 })
 
 
-describe('Long poll test', function(){
-  beforeEach(function(done){
-    datamodel.clear('foo', function(){
-      datamodel.clear('bar', done);
-    });
-  });
+describe('Long poll test', () => {
+  beforeEach(async () => {
+    await datamodel.clear('foo')
+    await datamodel.clear('bar')
+  })
 
-  describe('GET /foo and POST /foo', function(done){
+  describe('GET /foo and POST /foo', () => {
     it('respond 200 with json to both requests', function(done){
       var doneCnt = 0;
       function allDone(){
@@ -64,7 +53,7 @@ describe('Long poll test', function(){
     })
   });
 
-  describe('GET /foo and GET /bar and POST /foo,bar', function(done){
+  describe('GET /foo and GET /bar and POST /foo,bar', () => {
     it('respond 200 with json to all requests', function(done){
       var doneCnt = 0;
       function allDone(){
@@ -95,7 +84,7 @@ describe('Long poll test', function(){
     })
   });
 
-  describe('GET /foo and GET /foo and POST /foo 2 entities', function(done){
+  describe('GET /foo and GET /foo and POST /foo 2 entities', () => {
     it('respond 200 with json to all requests', function(done){
       var doneCnt = 0;
       function allDone(){
@@ -124,7 +113,7 @@ describe('Long poll test', function(){
     })
   });
 
-  describe('GET /foo and timeout', function(done){
+  describe('GET /foo and timeout', () => {
     it('abort not to raise error on server', function(done){
       var req_ = request(app).get('/foo');
       var req = http.get(req_.url, function(res){
