@@ -2,7 +2,7 @@ nmpriq
 ======
 Priority queue service based on HTTP with Node.js and MongoDB backend
 
-[![Build Status](https://travis-ci.org/tilfin/nmpriq.png?branch=master)](https://travis-ci.org/tilfin/nmpriq) [![Coverage Status](https://coveralls.io/repos/tilfin/nmpriq/badge.png?branch=master)](https://coveralls.io/r/tilfin/nmpriq?branch=master)
+[![Build Status](https://travis-ci.org/tilfin/nmpriq.svg?branch=master)](https://travis-ci.org/tilfin/nmpriq) [![Coverage Status](https://coveralls.io/repos/tilfin/nmpriq/badge.svg?branch=master)](https://coveralls.io/r/tilfin/nmpriq?branch=master)
 
 
 About
