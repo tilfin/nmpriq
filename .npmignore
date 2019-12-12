@@ -1,0 +1,5 @@
+coverage
+test
+.gitignore
+.nyc_output
+.travis.yml
