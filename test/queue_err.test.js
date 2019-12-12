@@ -1,13 +1,7 @@
 const assert = require('assert')
 const Datamodel = require("../lib/queue")
 
-
-const dummyLogger = {
-  debug: () => {},
-  info : () => {},
-  warn : () => {},
-  error: () => {},
-}
+const dummyLogger = require('./logger')
 
 
 describe('dataModel#initialize', () => {

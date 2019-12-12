@@ -2,13 +2,7 @@ const request = require('supertest')
 const Datamodel = require("../lib/queue")
 const servercore = require("../lib/servercore")
 
-
-const dummyLogger = {
-  debug: () => {},
-  info : () => {},
-  warn : () => {},
-  error: () => {},
-}
+const dummyLogger = require('./logger')
 
 const datamodel = new Datamodel(dummyLogger)
 const app = servercore(datamodel, dummyLogger).createServer();

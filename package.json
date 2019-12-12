@@ -1,26 +1,30 @@
 {
   "name": "nmpriq",
   "description": "Priority-queue server for Node.js with MongoDB backend",
-  "version": "0.2.0",
-  "author": "Toshimitsu Takahashi <toshi@tilfin.com>",
+  "version": "0.4.0",
+  "author": "Toshimitsu Takahashi",
+  "homepage": "https://github.com/tilfin/nmpriq#readme",
+  "license": "MIT",
   "dependencies": {
-    "mongodb": "~3.3",
-    "commander": "~4.0.1"
+    "mongodb": "^3.4.0",
+    "commander": "^4.0.1"
   },
   "devDependencies": {
-    "mocha": "*",
-    "supertest": "*",
-    "istanbul": "~0.4.5",
-    "coveralls": "~3.0.9"
+    "coveralls": "^3.0.9",
+    "mocha": "6.2.2",
+    "nyc": "^14.1.1",
+    "supertest": "4.0.2"
   },
   "main": "index.js",
   "bin": {
     "nmpriq": "./bin/nmpriq"
   },
   "scripts": {
-    "test": "mocha test/*.test.js"
+    "test": "mocha",
+    "ci_test": "nyc npm test",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
-  "engine": {
+  "engines": {
     "node": ">=10"
   }
 }

@@ -1,15 +1,8 @@
+const request = require('supertest')
+const Datamodel = require("./datamodel_err_stub")
+const servercore = require("../lib/servercore")
 
-var request = require('supertest')
-var Datamodel = require("./datamodel_err_stub");
-var servercore = require("../lib/servercore");
-
-
-var dummyLogger = {
-  debug:() => {},
-  info :() => {},
-  warn :() => {},
-  error:() => {},
-}
+const dummyLogger = require('./logger')
 
 const datamodel = new Datamodel(dummyLogger)
 const app = servercore(datamodel, dummyLogger).createServer()
